@@ -137,7 +137,16 @@ class CalcApp(tk.Tk):
         for var in (self.a, self.b, self.op):
             var.trace_add("write", lambda *_: self.update_calc())
 
+        # Feature: the calculater always on top of other windows
+        self.topmost = tk.BooleanVar(value=True)
+        ttk.Checkbutton(self, text="Always on top", variable=self.topmost,
+                        command=self.update_topmost).grid(row=2, column=0, sticky="w", padx=10, pady=(0, 10))
+        self.update_topmost()
+
         self.bind("<Escape>", lambda e: self.destroy())
+
+    def update_topmost(self):
+        self.attributes("-topmost", self.topmost.get())
 
     def show(self, labels, value):
         labels["BIN"].config(text=group(tobinary(value), 4))
